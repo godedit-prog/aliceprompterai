@@ -32,7 +32,7 @@
     "@tiptap/extensions": "^3.19.0",
     "@tiptap/pm": "^3.19.0",
     "@tiptap/react": "^3.19.0",
-    "@tiptap/starter-kit": "^3.19.0",
+    "@tiptap/starter-kit": "^3.23.1",
     "@tiptap/suggestion": "^3.19.0",
     "@vercel/analytics": "^1.6.1",
     "@vercel/blob": "^0.27.0",
