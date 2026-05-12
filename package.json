@@ -34,7 +34,7 @@
     "@tiptap/react": "^3.19.0",
     "@tiptap/starter-kit": "^3.19.0",
     "@tiptap/suggestion": "^3.19.0",
-    "@vercel/analytics": "^1.6.1",
+    "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^0.27.0",
     "@xyflow/react": "^12.10.0",
     "ai": "^6.0.95",
