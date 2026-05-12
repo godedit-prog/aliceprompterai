@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "git-tag",
+    "first-time-contributor",
+    "released"
+  ],
+  "owner": "vercel-labs",
+  "repo": "tersa",
+  "onlyPublishWithReleaseLabel": false
+}
