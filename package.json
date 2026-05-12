@@ -12,7 +12,7 @@
     "fix": "ultracite fix"
   },
   "dependencies": {
-    "@ai-sdk/gateway": "^3.0.53",
+    "@ai-sdk/gateway": "^3.0.112",
     "@ai-sdk/react": "^3.0.97",
     "@tiptap/core": "^3.19.0",
     "@tiptap/extension-character-count": "^3.19.0",
