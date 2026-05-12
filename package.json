@@ -37,7 +37,7 @@
     "@vercel/analytics": "^1.6.1",
     "@vercel/blob": "^0.27.0",
     "@xyflow/react": "^12.10.0",
-    "ai": "^6.0.95",
+    "ai": "^6.0.177",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
