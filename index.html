@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PromptPro Studio | Niche Prompt Rewriter</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: rgba(255, 255, 255, 0.86);
+      --card-solid: #ffffff;
+      --text: #101828;
+      --muted: #667085;
+      --line: #e4e7ec;
+      --primary: #5b5ce2;
+      --primary-dark: #4142bc;
+      --primary-soft: #ececff;
+      --success: #039855;
+      --warning: #f79009;
+      --danger: #d92d20;
+      --shadow: 0 24px 60px rgba(16, 24, 40, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(91, 92, 226, 0.22), transparent 30%),
+        radial-gradient(circle at top right, rgba(3, 152, 85, 0.12), transparent 28%),
+        linear-gradient(135deg, #fbfcff 0%, var(--bg) 100%);
+      padding: 28px;
+    }
+
+    button,
+    textarea,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+    }
+
+    .app-shell {
+      width: min(1220px, 100%);
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), #8f90ff);
+      color: white;
+      font-weight: 900;
+      box-shadow: 0 14px 30px rgba(91, 92, 226, 0.25);
+    }
+
+    .brand h1 {
+      font-size: clamp(1.25rem, 2vw, 1.65rem);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+    }
+
+    .brand p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-top: 3px;
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 750;
+      transition: 180ms ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 12px 26px rgba(91, 92, 226, 0.22);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .btn-secondary:hover {
+      border-color: #c7c9f8;
+      color: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.03fr 0.97fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: var(--card);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.74);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+    }
+
+    .intro-card {
+      padding: clamp(22px, 4vw, 38px);
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .intro-card::after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      bottom: -110px;
+      width: 260px;
+      height: 260px;
+      background: linear-gradient(135deg, rgba(91, 92, 226, 0.22), rgba(3, 152, 85, 0.16));
+      border-radius: 50%;
+      filter: blur(2px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 8px 12px;
+      border: 1px solid #d9dafe;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .intro-card h2 {
+      max-width: 680px;
+      font-size: clamp(2rem, 5vw, 4.4rem);
+      line-height: 0.95;
+      letter-spacing: -0.075em;
+      margin-bottom: 18px;
+    }
+
+    .intro-card h2 span {
+      color: var(--primary);
+    }
+
+    .intro-card .lead {
+      max-width: 670px;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.6vw, 1.15rem);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature {
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+    }
+
+    .feature strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+
+    .feature p {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .chat-card {
+      min-height: 720px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .agent {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #101828, var(--primary));
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .agent strong {
+      display: block;
+      font-size: 1rem;
+    }
+
+    .agent span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      margin-top: 2px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .chat-log {
+      padding: 18px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 480px;
+    }
+
+    .message {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      animation: rise 220ms ease both;
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bubble {
+      max-width: 86%;
+      padding: 13px 15px;
+      border-radius: 18px;
+      line-height: 1.55;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .message.bot .bubble {
+      background: white;
+      border: 1px solid var(--line);
+      border-bottom-left-radius: 6px;
+      color: var(--text);
+    }
+
+    .message.user .bubble {
+      background: var(--primary);
+      color: white;
+      border-bottom-right-radius: 6px;
+    }
+
+    .composer {
+      border-top: 1px solid var(--line);
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.83rem;
+      font-weight: 800;
+      color: #344054;
+    }
+
+    textarea,
+    input,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: white;
+      color: var(--text);
+      outline: none;
+      transition: 160ms ease;
+    }
+
+    textarea {
+      min-height: 132px;
+      resize: vertical;
+      padding: 14px;
+      line-height: 1.55;
+    }
+
+    input,
+    select {
+      min-height: 44px;
+      padding: 10px 12px;
+    }
+
+    textarea:focus,
+    input:focus,
+    select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(91, 92, 226, 0.11);
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      user-select: none;
+    }
+
+    .chip input {
+      display: none;
+    }
+
+    .chip:has(input:checked) {
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      border-color: #c7c9f8;
+    }
+
+    .output-actions {
+      display: none;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .output-actions.show {
+      display: flex;
+    }
+
+    .secondary-layout {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .mini-card {
+      padding: 20px;
+      background: var(--card-solid);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 14px 40px rgba(16, 24, 40, 0.055);
+    }
+
+    .mini-card h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .mini-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(120%);
+      background: #101828;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 999px;
+      box-shadow: 0 18px 50px rgba(16, 24, 40, 0.22);
+      transition: 220ms ease;
+      z-index: 9999;
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(16, 24, 40, 0.45);
+      padding: 22px;
+      z-index: 9998;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      width: min(620px, 100%);
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      box-shadow: 0 30px 90px rgba(16, 24, 40, 0.24);
+    }
+
+    .modal h3 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      letter-spacing: -0.03em;
+    }
+
+    .modal p {
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    .modal code {
+      display: block;
+      margin: 12px 0;
+      padding: 13px;
+      background: #f2f4f7;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      color: #344054;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      font-size: 0.82rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 980px) {
+      body {
+        padding: 18px;
+      }
+
+      .hero,
+      .secondary-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .chat-card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 12px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .top-actions {
+        width: 100%;
+        justify-content: stretch;
+      }
+
+      .top-actions .btn {
+        flex: 1;
+      }
+
+      .feature-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bubble {
+        max-width: 94%;
+      }
+
+      .intro-card,
+      .chat-header,
+      .composer,
+      .chat-log {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand" aria-label="PromptPro Studio brand">
+        <div class="brand-mark">PP</div>
+        <div>
+          <h1>PromptPro Studio</h1>
+          <p>Rewrite rough prompts into clear, niche-specific professional prompts.</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn btn-secondary" type="button" onclick="loadExample()">Load Example</button>
+        <button class="btn btn-primary" type="button" onclick="openZendesk()">Open Zendesk Chat</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <article class="panel intro-card">
+        <div>
+          <div class="eyebrow">✨ Niche-aware prompt refinement system</div>
+          <h2>Turn messy ideas into <span>professional prompts</span>.</h2>
+          <p class="lead">
+            Paste any rough prompt, choose your niche, add the result you want, and the chatbot will rebuild it with role, context, task, constraints, style direction, output format, and quality checks.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature">
+            <strong>Structured prompt rewrite</strong>
+            <p>Converts vague prompts into organized instructions that are easier for AI tools to follow.</p>
+          </div>
+          <div class="feature">
+            <strong>Niche tailoring</strong>
+            <p>Adds relevant wording for ads, visuals, websites, resumes, education, customer support, and more.</p>
+          </div>
+          <div class="feature">
+            <strong>Consistency control</strong>
+            <p>Includes guardrails, avoid-lists, acceptance criteria, and output rules to reduce random results.</p>
+          </div>
+          <div class="feature">
+            <strong>Zendesk ready</strong>
+            <p>Use the built-in button with your Zendesk Web Widget snippet when your account is connected.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel chat-card" aria-label="Prompt rewriting chatbot">
+        <div class="chat-header">
+          <div class="agent">
+            <div class="avatar">AI</div>
+            <div>
+              <strong>PromptPro Assistant</strong>
+              <span><i class="status-dot"></i> Ready to refine your prompt</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary" type="button" onclick="clearChat()">Reset</button>
+        </div>
+
+        <div id="chatLog" class="chat-log" aria-live="polite"></div>
+
+        <div class="composer">
+          <div class="form-grid">
+            <div class="field full">
+              <label for="rawPrompt">Paste your rough prompt</label>
+              <textarea id="rawPrompt" placeholder="Example: make me an ad video prompt for a luxury decor business with graduation, naming ceremony and romantic setup scenes..."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="niche">Choose your niche</label>
+              <select id="niche">
+                <option value="Marketing / Ads">Marketing / Ads</option>
+                <option value="Image Generation">Image Generation</option>
+                <option value="Video Generation">Video Generation</option>
+                <option value="Website UI/UX">Website UI/UX</option>
+                <option value="Resume / CV">Resume / CV</option>
+                <option value="Business / Virtual Assistant">Business / Virtual Assistant</option>
+                <option value="Education / Study Support">Education / Study Support</option>
+                <option value="Social Media Content">Social Media Content</option>
+                <option value="E-commerce Product Listing">E-commerce Product Listing</option>
+                <option value="Customer Support">Customer Support</option>
+                <option value="Custom">Custom niche</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="customNiche">Custom niche / industry</label>
+              <input id="customNiche" type="text" placeholder="Example: real estate, fashion, travel planning" />
+            </div>
+
+            <div class="field">
+              <label for="goal">Main goal</label>
+              <input id="goal" type="text" placeholder="Example: get a cinematic video ad output" />
+            </div>
+
+            <div class="field">
+              <label for="tone">Preferred tone</label>
+              <select id="tone">
+                <option>Professional and clear</option>
+                <option>Premium and luxury</option>
+                <option>Friendly and simple</option>
+                <option>Persuasive and sales-focused</option>
+                <option>Academic and detailed</option>
+                <option>Creative and cinematic</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="chips" aria-label="Prompt controls">
+            <label class="chip"><input id="includeExamples" type="checkbox" checked /> Add examples</label>
+            <label class="chip"><input id="includeAvoid" type="checkbox" checked /> Add avoid list</label>
+            <label class="chip"><input id="includeChecklist" type="checkbox" checked /> Add quality checklist</label>
+            <label class="chip"><input id="strictFormat" type="checkbox" checked /> Strict output format</label>
+          </div>
+
+          <div class="controls-row">
+            <button class="btn btn-primary" type="button" onclick="rewritePrompt()">Rewrite Prompt</button>
+            <div id="outputActions" class="output-actions">
+              <button class="btn btn-secondary" type="button" onclick="copyOutput()">Copy Output</button>
+              <button class="btn btn-secondary" type="button" onclick="downloadOutput()">Download .txt</button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="secondary-layout" aria-label="How the app works">
+      <article class="mini-card">
+        <h3>1. Paste your idea</h3>
+        <p>Start messy. The system extracts intent, audience, output type, quality needs, and missing details.</p>
+      </article>
+      <article class="mini-card">
+        <h3>2. Select your niche</h3>
+        <p>The rewrite adapts the language for your industry, so a video prompt does not sound like a resume prompt.</p>
+      </article>
+      <article class="mini-card">
+        <h3>3. Copy the final prompt</h3>
+        <p>Use the professional version in ChatGPT, Gemini, Claude, image generators, video generators, or client workflows.</p>
+      </article>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status">Copied</div>
+
+  <div id="zendeskModal" class="modal-backdrop" onclick="closeZendeskModal(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="zendeskTitle">
+      <h3 id="zendeskTitle">Connect your Zendesk Web Widget</h3>
+      <p>
+        This page is ready for Zendesk, but your Zendesk snippet key is not connected yet. In your Zendesk Admin Center, copy your Web Widget script and paste it before the closing body tag.
+      </p>
+      <code>&lt;script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=YOUR_ZENDESK_SNIPPET_KEY"&gt;&lt;/script&gt;</code>
+      <p>After adding the real key, the “Open Zendesk Chat” button will open your Zendesk Messenger widget.</p>
+      <div class="modal-actions">
+        <button class="btn btn-primary" type="button" onclick="hideZendeskModal()">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!--
+    ZENDESK SETUP
+    1. Create or open your Zendesk Messaging Web Widget.
+    2. Copy the official snippet from Zendesk Admin Center.
+    3. Paste it below this comment, before the closing body tag.
+    4. Replace YOUR_ZENDESK_SNIPPET_KEY with your real key if using this example.
+
+    Example:
+    <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=YOUR_ZENDESK_SNIPPET_KEY"></script>
+  -->
+
+  <script>
+    let latestOutput = "";
+
+    const AI_API_ENDPOINT = "/api/rewrite-prompt";
+
+    const chatLog = document.getElementById("chatLog");
+
+    const nichePlaybooks = {
+      "Marketing / Ads": {
+        role: "senior creative strategist and direct-response copywriter",
+        additions: [
+          "Define the target audience, emotional hook, pain point, promise, offer, and call-to-action.",
+          "Use benefit-led language and avoid generic hype.",
+          "Include platform fit, duration, scene flow, visual direction, and conversion goal where relevant."
+        ],
+        example: "Example output can include headline options, ad script, scene sequence, CTA, and brand-safe wording."
+      },
+      "Image Generation": {
+        role: "professional AI image prompt engineer and art director",
+        additions: [
+          "Specify subject, environment, composition, lighting, lens, style, mood, color palette, aspect ratio, realism level, and negative prompt.",
+          "Lock important identity, object, brand, and scene details to reduce inconsistency.",
+          "Use clear visual hierarchy and avoid conflicting style instructions."
+        ],
+        example: "Example output can include main prompt, negative prompt, camera details, lighting notes, and consistency rules."
+      },
+      "Video Generation": {
+        role: "cinematic AI video director and prompt engineer",
+        additions: [
+          "Break the concept into shots, camera movement, timing, transitions, sound design, visual continuity, and end-card details.",
+          "Specify duration, aspect ratio, pacing, scene order, and what must remain consistent across clips.",
+          "Include avoid instructions for distorted hands, flicker, warped text, incorrect logos, and unnatural motion."
+        ],
+        example: "Example output can include shot-by-shot prompt, voiceover, camera direction, audio mood, and editing notes."
+      },
+      "Website UI/UX": {
+        role: "senior UI/UX designer and frontend product strategist",
+        additions: [
+          "Clarify user journey, page goal, information hierarchy, layout, components, states, responsiveness, accessibility, and microcopy.",
+          "Use clean design language with consistent spacing, clear CTAs, and mobile-first behavior.",
+          "Include acceptance criteria for usability and visual polish."
+        ],
+        example: "Example output can include layout sections, component list, UX rules, visual style, and responsive behavior."
+      },
+      "Resume / CV": {
+        role: "professional resume strategist and career branding expert",
+        additions: [
+          "Improve clarity, measurable impact, ATS-friendly wording, role relevance, and professional tone.",
+          "Translate responsibilities into achievement-based bullets where possible.",
+          "Avoid exaggeration and keep claims credible."
+        ],
+        example: "Example output can include summary, skills, rewritten bullets, and role-targeted keywords."
+      },
+      "Business / Virtual Assistant": {
+        role: "operations-focused virtual assistant and business documentation specialist",
+        additions: [
+          "Clarify task objective, client expectations, deadlines, deliverables, research standards, formatting, and follow-up steps.",
+          "Use organized, client-ready wording that is reliable, practical, and easy to execute.",
+          "Include checklists and confirmation points when the task has moving parts."
+        ],
+        example: "Example output can include task brief, research plan, checklist, email draft, or client-ready document structure."
+      },
+      "Education / Study Support": {
+        role: "patient learning coach and instructional designer",
+        additions: [
+          "Explain concepts step by step using simple language, examples, checks for understanding, and study-friendly formatting.",
+          "Adapt to learner level and avoid overcomplicating the explanation.",
+          "Include practice questions, summary, and common mistakes where useful."
+        ],
+        example: "Example output can include simple explanation, examples, quiz questions, and a short recap."
+      },
+      "Social Media Content": {
+        role: "social media strategist and content copywriter",
+        additions: [
+          "Clarify platform, audience, hook, caption angle, visual concept, CTA, hashtags, and engagement goal.",
+          "Use scroll-stopping but natural language.",
+          "Include variants for testing when helpful."
+        ],
+        example: "Example output can include hook options, caption, content format, CTA, and posting notes."
+      },
+      "E-commerce Product Listing": {
+        role: "e-commerce conversion copywriter and product positioning specialist",
+        additions: [
+          "Clarify product benefits, features, customer pain points, proof, use cases, objections, and buying triggers.",
+          "Make the product easy to understand without unsupported claims.",
+          "Include SEO keywords naturally."
+        ],
+        example: "Example output can include title, bullet points, description, FAQs, and conversion notes."
+      },
+      "Customer Support": {
+        role: "empathetic customer support specialist and help center writer",
+        additions: [
+          "Clarify the customer issue, desired resolution, tone, escalation rules, response boundaries, and next steps.",
+          "Use calm, helpful, human wording.",
+          "Avoid blaming the customer or making unsupported promises."
+        ],
+        example: "Example output can include response template, troubleshooting steps, escalation note, and support macro."
+      },
+      "Custom": {
+        role: "senior prompt engineer and domain specialist",
+        additions: [
+          "Clarify the objective, audience, required output, constraints, examples, and quality standards for the selected niche.",
+          "Use domain-specific language without overcomplicating the prompt.",
+          "Add guardrails that reduce vague, inconsistent, or off-topic responses."
+        ],
+        example: "Example output can include a complete rewritten prompt, format rules, and quality checklist."
+      }
+    };
+
+    function initChat() {
+      chatLog.innerHTML = "";
+      addMessage("bot", "Hi Greg — paste your rough prompt below, choose your niche, and I’ll restructure it into a professional prompt with clear instructions, guardrails, and output rules.");
+      addMessage("bot", "Tip: Add the result you want in the Main goal field. Example: ‘Create a premium 9:16 video ad prompt’ or ‘Rewrite my CV summary for a remote VA role.’");
+    }
+
+    function addMessage(type, text) {
+      const message = document.createElement("div");
+      message.className = `message ${type}`;
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = text;
+
+      message.appendChild(bubble);
+      chatLog.appendChild(message);
+      chatLog.scrollTop = chatLog.scrollHeight;
+      return message;
+    }
+
+    function removeMessage(message) {
+      if (message && message.parentNode) {
+        message.parentNode.removeChild(message);
+      }
+    }
+
+    function getSelectedNiche() {
+      const selected = document.getElementById("niche").value;
+      const custom = document.getElementById("customNiche").value.trim();
+      if (selected === "Custom" && custom) return custom;
+      if (custom && selected !== "Custom") return `${selected} / ${custom}`;
+      return selected;
+    }
+
+    function getBasePlaybook() {
+      const selected = document.getElementById("niche").value;
+      return nichePlaybooks[selected] || nichePlaybooks.Custom;
+    }
+
+    function cleanPrompt(raw) {
+      return raw
+        .replace(/\s+/g, " ")
+        .replace(/\s([.,!?;:])/g, "$1")
+        .trim();
+    }
+
+    function inferOutputType(raw, niche) {
+      const text = `${raw} ${niche}`.toLowerCase();
+      if (text.includes("image") || text.includes("picture") || text.includes("photo")) return "image-generation prompt";
+      if (text.includes("video") || text.includes("scene") || text.includes("camera")) return "video-generation prompt";
+      if (text.includes("resume") || text.includes("cv") || text.includes("linkedin")) return "career-writing prompt";
+      if (text.includes("website") || text.includes("ui") || text.includes("ux") || text.includes("html")) return "webpage / UI prompt";
+      if (text.includes("ad") || text.includes("caption") || text.includes("marketing")) return "marketing prompt";
+      return "professional task prompt";
+    }
+
+    function buildProfessionalPrompt(raw, niche, goal, tone) {
+      const playbook = getBasePlaybook();
+      const cleaned = cleanPrompt(raw);
+      const outputType = inferOutputType(cleaned, niche);
+      const includeExamples = document.getElementById("includeExamples").checked;
+      const includeAvoid = document.getElementById("includeAvoid").checked;
+      const includeChecklist = document.getElementById("includeChecklist").checked;
+      const strictFormat = document.getElementById("strictFormat").checked;
+
+      const goalLine = goal
+        ? goal
+        : `Rewrite and improve the original prompt into a polished ${outputType} that produces consistent, high-quality results.`;
+
+      const additions = playbook.additions.map(item => `- ${item}`).join("\n");
+
+      const avoidBlock = includeAvoid ? `\n\nAVOID / NEGATIVE INSTRUCTIONS\n- Do not produce vague, generic, incomplete, or contradictory instructions.\n- Do not add unsupported facts, fake statistics, or unrealistic claims.\n- Do not ignore the niche, target audience, requested tone, or output format.\n- Do not overcomplicate the final prompt with unnecessary jargon.\n- Ask for missing critical information only when it is necessary; otherwise make reasonable, clearly stated assumptions.` : "";
+
+      const examplesBlock = includeExamples ? `\n\nREFERENCE STYLE / EXAMPLES\n- Provide 1 polished final prompt as the main answer.\n- Include optional variations only if they help improve creative direction or testing.\n- ${playbook.example}` : "";
+
+      const checklistBlock = includeChecklist ? `\n\nQUALITY CHECKLIST BEFORE FINALIZING\n- The rewritten prompt is specific, structured, and easy to follow.\n- It clearly defines the role, task, context, target audience, style, constraints, and output format.\n- It is tailored to the selected niche: ${niche}.\n- It removes ambiguity and reduces inconsistent output.\n- It includes must-have details, avoid instructions, and acceptance criteria.\n- It keeps the tone ${tone.toLowerCase()} while staying natural and professional.` : "";
+
+      const formatBlock = strictFormat ? `\n\nOUTPUT FORMAT\nReturn the answer using this structure:\n1. Professional Rewritten Prompt\n2. Why This Version Is Stronger\n3. Missing Details To Ask The User, if any\n4. Optional Improved Variations, if useful` : `\n\nOUTPUT FORMAT\nReturn a clear professional rewritten prompt followed by a short explanation of what improved.`;
+
+      return `You are a ${playbook.role}.\n\nTASK\nRewrite the user's rough prompt into a professional, niche-specific prompt that produces more accurate, consistent, and high-quality output.\n\nNICHE / INDUSTRY\n${niche}\n\nMAIN GOAL\n${goalLine}\n\nTONE\n${tone}\n\nORIGINAL ROUGH PROMPT\n"${cleaned}"\n\nREWRITE REQUIREMENTS\n- Preserve the user's original intent, but make the prompt clearer, stronger, and more complete.\n- Add missing structure where needed: role, context, goal, audience, style, constraints, deliverables, and success criteria.\n- Tailor the language, details, and quality standards to the niche.\n- Make the final prompt practical enough to paste directly into an AI tool.\n- Keep the output focused and avoid unnecessary filler.\n${additions}${avoidBlock}${examplesBlock}${checklistBlock}${formatBlock}`;
+    }
+
+    async function callAiBackend(payload) {
+      const response = await fetch(AI_API_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.error || "The AI backend request failed.");
+      }
+
+      if (!data.rewrittenPrompt) {
+        throw new Error("The AI backend did not return a rewritten prompt.");
+      }
+
+      return data.rewrittenPrompt;
+    }
+
+    async function rewritePrompt() {
+      const rawPrompt = document.getElementById("rawPrompt").value.trim();
+      const niche = getSelectedNiche();
+      const goal = document.getElementById("goal").value.trim();
+      const tone = document.getElementById("tone").value;
+      const options = {
+        includeExamples: document.getElementById("includeExamples").checked,
+        includeAvoid: document.getElementById("includeAvoid").checked,
+        includeChecklist: document.getElementById("includeChecklist").checked,
+        strictFormat: document.getElementById("strictFormat").checked
+      };
+
+      if (!rawPrompt) {
+        showToast("Paste a rough prompt first");
+        document.getElementById("rawPrompt").focus();
+        return;
+      }
+
+      addMessage("user", `Niche: ${niche}
+Goal: ${goal || "Improve the prompt professionally"}
+
+${rawPrompt}`);
+
+      const typingMessage = addMessage("bot", "Refining with secure AI backend…");
+
+      try {
+        latestOutput = await callAiBackend({ rawPrompt, niche, goal, tone, options });
+        removeMessage(typingMessage);
+        addMessage("bot", latestOutput);
+      } catch (error) {
+        latestOutput = buildProfessionalPrompt(rawPrompt, niche, goal, tone);
+        removeMessage(typingMessage);
+        addMessage("bot", `The secure AI backend is not connected yet, so I used the built-in local prompt structure as a fallback.
+
+${latestOutput}`);
+      }
+
+      document.getElementById("outputActions").classList.add("show");
+    }
+
+    async function copyOutput() {
+      if (!latestOutput) {
+        showToast("No output to copy yet");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(latestOutput);
+        showToast("Professional prompt copied");
+      } catch (error) {
+        const temp = document.createElement("textarea");
+        temp.value = latestOutput;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        document.body.removeChild(temp);
+        showToast("Professional prompt copied");
+      }
+    }
+
+    function downloadOutput() {
+      if (!latestOutput) {
+        showToast("No output to download yet");
+        return;
+      }
+
+      const blob = new Blob([latestOutput], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "professional-prompt.txt";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast("Downloaded prompt file");
+    }
+
+    function clearChat() {
+      latestOutput = "";
+      document.getElementById("outputActions").classList.remove("show");
+      initChat();
+    }
+
+    function loadExample() {
+      document.getElementById("rawPrompt").value = "Create a video ad prompt for Cilla Royale Decor & Rentals. They decorate graduation events, romantic setups, naming ceremonies and rentals. Make it premium and cinematic for Instagram and TikTok.";
+      document.getElementById("niche").value = "Video Generation";
+      document.getElementById("customNiche").value = "Event decor and rentals";
+      document.getElementById("goal").value = "Create a premium 9:16 cinematic AI video ad prompt with scenes, camera direction, voiceover and CTA.";
+      document.getElementById("tone").value = "Premium and luxury";
+      showToast("Example loaded");
+    }
+
+    function showToast(text) {
+      const toast = document.getElementById("toast");
+      toast.textContent = text;
+      toast.classList.add("show");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function openZendesk() {
+      if (window.zE) {
+        try {
+          window.zE("messenger", "show");
+          window.zE("messenger", "open");
+        } catch (error) {
+          document.getElementById("zendeskModal").classList.add("show");
+        }
+      } else {
+        document.getElementById("zendeskModal").classList.add("show");
+      }
+    }
+
+    function hideZendeskModal() {
+      document.getElementById("zendeskModal").classList.remove("show");
+    }
+
+    function closeZendeskModal(event) {
+      if (event.target.id === "zendeskModal") hideZendeskModal();
+    }
+
+    document.addEventListener("DOMContentLoaded", initChat);
+  </script>
+</body>
+</html>
